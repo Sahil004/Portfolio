@@ -35,12 +35,19 @@ export const SKILLS = {
   ],
 };
 
+export const PROJECT_CATEGORIES = [
+  { id: "company", label: "Company" },
+  { id: "college", label: "College" },
+  { id: "self", label: "Self" },
+];
+
 export const PROJECTS = [
   {
     title: "My Pulse Pay",
     desc: "A production-grade fintech platform featuring Pay-In, Pay-Out, wallet management, beneficiary modules, and real-time analytics dashboards with Excel export and commission calculation logic.",
     tags: ["Next.js", "TypeScript", "Razorpay", "Cashfree", "Tailwind CSS"],
-    emoji: "💳",
+    category: "company",
+    image: "/projects/pulsepay-fintech.png",
     gradient: "from-[#0f1a2e] via-[#162040] to-[#0f2035]",
     gradientLight: "from-blue-100 via-blue-50 to-blue-100",
     demo: "#",
@@ -50,7 +57,8 @@ export const PROJECTS = [
     title: "Mango E-Commerce",
     desc: "An SEO-optimized eCommerce platform with product listing, advanced filtering, variant selection, cart/checkout, and a full admin dashboard for managing products, orders, and users.",
     tags: ["React.js", "Node.js", "Express.js", "SEO", "REST API"],
-    emoji: "🛍️",
+    category: "company",
+    image: "/projects/mango-ecommerce.png",
     gradient: "from-[#1a0f2e] via-[#2a1545] to-[#200f35]",
     gradientLight: "from-purple-100 via-purple-50 to-purple-100",
     demo: "#",
@@ -60,7 +68,8 @@ export const PROJECTS = [
     title: "Match My Needs",
     desc: "A SaaS quiz & survey builder with dynamic UI customization, logic-based recommendation engine, and third-party iframe integrations for Shopify and WordPress.",
     tags: ["Next.js", "TypeScript", "SaaS", "Shopify", "WordPress"],
-    emoji: "📋",
+    category: "company",
+    image: "/projects/myneeds-saas.png",
     gradient: "from-[#0a1f1a] via-[#0f2e24] to-[#0a2018]",
     gradientLight: "from-teal-100 via-teal-50 to-teal-100",
     demo: "#",
