@@ -108,8 +108,8 @@ export const TIMELINE = [
 export const SOCIALS = [
   {
     name: "LinkedIn",
-    handle: "sahilsayyad-b7a505221",
-    href: "https://www.linkedin.com/in/sahilsayyad-b7a505221",
+    handle: "sahil-sayyad-b7a505221",
+    href: "https://www.linkedin.com/in/sahil-sayyad-b7a505221/",
     icon: "💼",
     bg: "bg-blue-500/10 dark:bg-blue-500/10",
   },
