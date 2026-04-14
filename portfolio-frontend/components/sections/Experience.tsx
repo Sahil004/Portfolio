@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { TIMELINE } from "@/lib/data";
-import { SectionLabel, SectionTitle, AccentText } from "@/components/ui/SectionHeader";
+import {
+  SectionLabel,
+  SectionTitle,
+  AccentText,
+} from "@/components/ui/SectionHeader";
 import { cn } from "@/lib/utils";
 
 const badgeStyles = {
@@ -43,7 +47,7 @@ function TimelineItem({
       <div
         className={cn(
           "absolute left-0 top-3 w-3 h-3 rounded-full border-2 border-light-bg dark:border-dark-bg -translate-x-[calc(50%+0.5px)]",
-          dotColor[item.type]
+          dotColor[item.type],
         )}
       />
 
@@ -58,7 +62,7 @@ function TimelineItem({
         <span
           className={cn(
             "inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-2.5 py-1 rounded mb-3",
-            badgeStyles[item.type]
+            badgeStyles[item.type],
           )}
         >
           {badgeLabel[item.type]}
@@ -104,7 +108,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="py-28 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
+      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
     >
       <SectionLabel>Experience &amp; Education</SectionLabel>
       <SectionTitle>

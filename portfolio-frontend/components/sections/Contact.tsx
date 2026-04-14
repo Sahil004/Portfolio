@@ -4,7 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { SOCIALS } from "@/lib/data";
-import { SectionLabel, SectionTitle, AccentText } from "@/components/ui/SectionHeader";
+import {
+  SectionLabel,
+  SectionTitle,
+  AccentText,
+} from "@/components/ui/SectionHeader";
 import { FadeUp } from "@/components/ui/Motion";
 
 export default function Contact() {
@@ -25,7 +29,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-28 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
+      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
     >
       <SectionLabel>Contact</SectionLabel>
       <SectionTitle>
@@ -39,9 +43,9 @@ export default function Contact() {
             Let&apos;s build something amazing together 🚀
           </h3>
           <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed mb-8 text-[0.9375rem]">
-            I&apos;m always open to exciting new projects, full-time opportunities,
-            or just a great conversation about tech. Drop a message and I&apos;ll
-            get back to you soon.
+            I&apos;m always open to exciting new projects, full-time
+            opportunities, or just a great conversation about tech. Drop a
+            message and I&apos;ll get back to you soon.
           </p>
 
           <div className="flex flex-col gap-3">
@@ -66,7 +70,10 @@ export default function Contact() {
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-xl text-lg flex-shrink-0 ${social.bg}`}
                 >
-                  {social.icon}
+                  <social.icon
+                    className={`h-5 w-5 transition-colors duration-200 ${social.iconClass ?? "text-zinc-700 dark:text-zinc-300"}`}
+                    aria-hidden="true"
+                  />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
@@ -150,7 +157,10 @@ export default function Contact() {
             {/* Submit */}
             <motion.button
               type="submit"
-              whileHover={{ y: -2, boxShadow: "0 0 32px rgba(110,115,255,0.35)" }}
+              whileHover={{
+                y: -2,
+                boxShadow: "0 0 32px rgba(110,115,255,0.35)",
+              }}
               whileTap={{ scale: 0.97 }}
               className="self-start inline-flex items-center gap-2 px-6 py-3 rounded-xl
                 bg-[#6e73ff] text-white text-sm font-medium

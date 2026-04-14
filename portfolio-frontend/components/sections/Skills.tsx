@@ -1,57 +1,151 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SKILLS } from "@/lib/data";
-import { SectionLabel, SectionTitle, AccentText } from "@/components/ui/SectionHeader";
-import { FadeUp } from "@/components/ui/Motion";
+import {
+  SectionLabel,
+  SectionTitle,
+  AccentText,
+} from "@/components/ui/SectionHeader";
+import {
+  MdAutoAwesome,
+  MdBuild,
+  MdOutlineDesktopWindows,
+  MdOutlineSettings,
+  MdStorage,
+} from "react-icons/md";
+import { IconType } from "react-icons";
+
+const TAB_ORDER = [
+  "Frontend",
+  "Backend",
+  "Database",
+  "Tools & DevOps",
+  "Other",
+] as const;
+
+type Tab = (typeof TAB_ORDER)[number];
+
+const TAB_ICONS: Record<Tab, IconType> = {
+  Frontend: MdOutlineDesktopWindows,
+  Backend: MdOutlineSettings,
+  Database: MdStorage,
+  "Tools & DevOps": MdBuild,
+  Other: MdAutoAwesome,
+};
+
+const BADGES: Record<string, { label: string; color: string }> = {
+  "Performance Optim.": { label: "2026 ★", color: "#6e73ff" },
+  SEO: { label: "2026 ★", color: "#6e73ff" },
+  "Core Web Vitals": { label: "2026 ★", color: "#6e73ff" },
+  "Web Accessibility": { label: "2026 ★", color: "#6e73ff" },
+  GraphQL: { label: "Hot", color: "#ff6e9c" },
+  "Nest.js": { label: "Hot", color: "#ff6e9c" },
+};
 
 export default function Skills() {
+  const [active, setActive] = useState<Tab>("Frontend");
+
   return (
     <section
       id="skills"
-      className="py-28 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
+      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
     >
       <SectionLabel>Tech Stack</SectionLabel>
       <SectionTitle>
         What I <AccentText>build with</AccentText>
       </SectionTitle>
 
-      <div className="flex flex-col gap-12 mt-12">
-        {Object.entries(SKILLS).map(([category, items], catIdx) => (
-          <FadeUp key={category} delay={catIdx * 0.1}>
-            <div>
-              <p className="text-xs font-semibold tracking-[0.15em] uppercase text-zinc-400 dark:text-zinc-500 mb-5">
-                {category}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {items.map((skill, i) => (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.04, duration: 0.4 }}
-                    whileHover={{
-                      y: -4,
-                      borderColor: "rgba(110,115,255,0.6)",
-                      boxShadow:
-                        "0 8px 24px rgba(0,0,0,0.15), 0 0 0 1px rgba(110,115,255,0.4)",
-                    }}
-                    className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl
-                      bg-white/40 dark:bg-white/[0.03]
-                      border border-black/8 dark:border-white/8
-                      text-sm font-medium text-zinc-700 dark:text-zinc-300
-                      cursor-default transition-colors duration-200"
-                  >
-                    <span className="text-base leading-none">{skill.icon}</span>
-                    <span>{skill.name}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </FadeUp>
-        ))}
+      {/* Tabs — icon + label, underline style */}
+      <div className="flex flex-wrap gap-0 mt-12 mb-10 border-b border-black/8 dark:border-white/8">
+        {TAB_ORDER.map((tab) => {
+          const Icon = TAB_ICONS[tab];
+          return (
+            <button
+              key={tab}
+              onClick={() => setActive(tab)}
+              className={`relative flex items-center gap-2 px-5 py-3 text-sm font-medium transition-colors duration-200
+              ${
+                active === tab
+                  ? "text-zinc-900 dark:text-white"
+                  : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300"
+              }`}
+            >
+              <Icon className="text-base leading-none" />
+              {tab}
+
+              {/* Active underline */}
+              {active === tab && (
+                <motion.span
+                  layoutId="tab-underline"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full bg-[#6e73ff]"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
+
+      {/* Grid */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+          className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3"
+        >
+          {(SKILLS[active] ?? []).map((skill, i) => {
+            const badge = BADGES[skill.name];
+            return (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.035, duration: 0.25 }}
+                whileHover={{ y: -4, scale: 1.03 }}
+                className="group relative flex flex-col items-center justify-center gap-4
+                  py-7 px-3 rounded-2xl cursor-default
+                  bg-white dark:bg-white/[0.03]
+                  border border-black/8 dark:border-white/8
+                  hover:border-[#6e73ff]/40 dark:hover:border-[#6e73ff]/40
+                  hover:shadow-[0_8px_32px_rgba(110,115,255,0.12)]
+                  transition-all duration-200"
+              >
+                {/* Badge */}
+                {badge && (
+                  <span
+                    className="absolute top-2 right-2 text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                    style={{
+                      color: badge.color,
+                      background: `${badge.color}18`,
+                      border: `0.5px solid ${badge.color}44`,
+                    }}
+                  >
+                    {badge.label}
+                  </span>
+                )}
+
+                {/* Icon */}
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <skill.icon
+                    className={`w-10 h-10 transition-all duration-200 ${skill.iconClass ?? "text-zinc-400"}`}
+                    aria-hidden
+                  />
+                </div>
+
+                {/* Name */}
+                <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-zinc-200 text-center leading-snug transition-colors duration-200">
+                  {skill.name}
+                </span>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 }
