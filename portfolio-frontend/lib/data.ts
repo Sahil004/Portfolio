@@ -368,7 +368,7 @@ export const TIMELINE = [
     type: "work" as const,
     role: "Associate Software Engineer",
     company: "Consociate Solutions · Pune, India",
-    date: "Jan 2025 – Present",
+    date: "Jan 2025 – Mar 2026",
     bullets: [
       "Developed scalable web applications using Next.js, React.js, and TypeScript for fintech and SaaS clients",
       "Architected reusable, modular UI component libraries improving development efficiency and maintainability",
@@ -381,9 +381,19 @@ export const TIMELINE = [
     type: "edu" as const,
     role: "Master of Computer Science (MCS)",
     company: "Vishwakarma College of Arts, Commerce and Science · Pune",
-    date: "2021 – 2023",
+    date: "2021 - 2023",
     bullets: [
       "CGPA: 8.6 — Graduated with distinction",
+      "Relevant courses: Data Structures, Web Development, Databases, Software Engineering, Cloud",
+    ],
+  },
+  {
+    type: "edu" as const,
+    role: "Bachelor of Computer Science (MCS)",
+    company: "AKI's Poona College of Arts, Commerce and Science · Pune",
+    date: "2018 - 2021",
+    bullets: [
+      "CGPA: 8.2 — First Class with distinction",
       "Relevant courses: Data Structures, Web Development, Databases, Software Engineering, Cloud",
     ],
   },
