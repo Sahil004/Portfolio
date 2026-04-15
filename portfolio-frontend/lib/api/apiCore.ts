@@ -4,8 +4,6 @@ type ApiOptions = {
   method?: Method;
   body?: Record<string, unknown>;
   headers?: HeadersInit;
-  cache?: RequestCache;
-  revalidate?: number;
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
@@ -14,13 +12,7 @@ export async function apiClient<T>(
   endpoint: string,
   options: ApiOptions = {},
 ): Promise<T> {
-  const {
-    method = "GET",
-    body,
-    headers = {},
-    cache = "no-store",
-    revalidate,
-  } = options;
+  const { method = "GET", body, headers = {} } = options;
 
   try {
     const res = await fetch(`${BASE_URL}${endpoint}`, {
@@ -37,8 +29,6 @@ export async function apiClient<T>(
             ? body
             : JSON.stringify(body)
           : undefined,
-      cache,
-      ...(revalidate ? { next: { revalidate } } : {}),
     });
 
     const contentType = res.headers.get("content-type");
