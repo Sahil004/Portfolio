@@ -4,6 +4,7 @@ type ApiOptions = {
   method?: Method;
   body?: Record<string, unknown>;
   headers?: HeadersInit;
+  cache?: RequestCache;
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
@@ -29,6 +30,7 @@ export async function apiClient<T>(
             ? body
             : JSON.stringify(body)
           : undefined,
+      cache: options.cache || "no-cache",
     });
 
     const contentType = res.headers.get("content-type");
