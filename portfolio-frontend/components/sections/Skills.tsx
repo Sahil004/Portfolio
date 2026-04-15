@@ -48,15 +48,6 @@ const TAB_ICONS: Record<Tab, IconType> = {
   Other: MdAutoAwesome,
 };
 
-const BADGES: Record<string, { label: string; color: string }> = {
-  "Performance Optim.": { label: "2026 ★", color: "#6e73ff" },
-  SEO: { label: "2026 ★", color: "#6e73ff" },
-  "Core Web Vitals": { label: "2026 ★", color: "#6e73ff" },
-  "Web Accessibility": { label: "2026 ★", color: "#6e73ff" },
-  GraphQL: { label: "Hot", color: "#ff6e9c" },
-  "Nest.js": { label: "Hot", color: "#ff6e9c" },
-};
-
 export default function Skills({
   skills,
 }: {

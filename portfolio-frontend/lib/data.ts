@@ -40,7 +40,6 @@ import {
   SiBootstrap,
   SiMui,
   SiShadcnui,
-  SiCss,
   SiSpringboot,
   SiBabel,
   SiGooglecloud,
