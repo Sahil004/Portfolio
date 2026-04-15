@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SKILLS } from "@/lib/data";
 import {
   SectionLabel,
   SectionTitle,
@@ -15,7 +14,14 @@ import {
   MdOutlineSettings,
   MdStorage,
 } from "react-icons/md";
+
+import * as SiIcons from "react-icons/si";
+import * as FaIcons from "react-icons/fa";
+import * as MdIcons from "react-icons/md";
+import * as BiIcons from "react-icons/bi";
+
 import { IconType } from "react-icons";
+import { Skill } from "@/lib/types/skillsType";
 
 const TAB_ORDER = [
   "Frontend",
@@ -24,6 +30,13 @@ const TAB_ORDER = [
   "Tools & DevOps",
   "Other",
 ] as const;
+
+const ICON_MAP: Record<string, IconType> = {
+  ...SiIcons,
+  ...FaIcons,
+  ...MdIcons,
+  ...BiIcons,
+};
 
 type Tab = (typeof TAB_ORDER)[number];
 
@@ -44,13 +57,17 @@ const BADGES: Record<string, { label: string; color: string }> = {
   "Nest.js": { label: "Hot", color: "#ff6e9c" },
 };
 
-export default function Skills() {
+export default function Skills({
+  skills,
+}: {
+  skills: Record<string, Skill[]>;
+}) {
   const [active, setActive] = useState<Tab>("Frontend");
 
   return (
     <section
       id="skills"
-      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
+      className="py-10 md:py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
     >
       <SectionLabel>Tech Stack</SectionLabel>
       <SectionTitle>
@@ -58,7 +75,8 @@ export default function Skills() {
       </SectionTitle>
 
       {/* Tabs — icon + label, underline style */}
-      <div className="flex flex-wrap gap-0 mt-12 mb-10 border-b border-black/8 dark:border-white/8">
+      <div className="flex overflow-x-auto whitespace-nowrap mt-12 mb-10 border-b border-black/8 dark:border-white/8 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-black/20 dark:scrollbar-thumb-white/20">
+        {" "}
         {TAB_ORDER.map((tab) => {
           const Icon = TAB_ICONS[tab];
           return (
@@ -98,8 +116,10 @@ export default function Skills() {
           transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
           className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3"
         >
-          {(SKILLS[active] ?? []).map((skill, i) => {
-            const badge = BADGES[skill.name];
+          {(skills[active] ?? []).map((skill, i) => {
+            const badge = skill.badge;
+            const Icon =
+              skill.icon && ICON_MAP[skill.icon] ? ICON_MAP[skill.icon] : null;
             return (
               <motion.div
                 key={skill.name}
@@ -108,7 +128,7 @@ export default function Skills() {
                 transition={{ delay: i * 0.035, duration: 0.25 }}
                 whileHover={{ y: -4, scale: 1.03 }}
                 className="group relative flex flex-col items-center justify-center gap-4
-                  py-7 px-3 rounded-2xl cursor-default
+                  py-5 md:py-7 px-3 rounded-2xl cursor-default
                   bg-white dark:bg-white/[0.03]
                   border border-black/8 dark:border-white/8
                   hover:border-[#6e73ff]/40 dark:hover:border-[#6e73ff]/40
@@ -131,10 +151,12 @@ export default function Skills() {
 
                 {/* Icon */}
                 <div className="w-12 h-12 flex items-center justify-center">
-                  <skill.icon
-                    className={`w-10 h-10 transition-all duration-200 ${skill.iconClass ?? "text-zinc-400"}`}
-                    aria-hidden
-                  />
+                  {Icon && (
+                    <Icon
+                      className={`w-8 md:w-10 h-8 md:h-10 transition-all duration-200 ${skill.iconClass ?? "text-zinc-400"}`}
+                      aria-hidden
+                    />
+                  )}
                 </div>
 
                 {/* Name */}

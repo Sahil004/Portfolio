@@ -7,15 +7,18 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/ui/Footer";
+import { getSkills } from "@/lib/api/apiHelperFunction";
 
-export default function Home() {
+export default async function Home() {
+  const skills = await getSkills();
+  console.log("Fetched skills:", skills);
   return (
     <main className="relative">
       <ScrollProgress />
       <Navbar />
       <Hero />
       <About />
-      <Skills />
+      <Skills skills={skills} />
       <Projects />
       <Experience />
       <Contact />
