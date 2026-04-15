@@ -61,7 +61,7 @@ export default function Hero() {
             {...fadeUp(0.2)}
             className="font-display text-xl md:text-2xl font-semibold text-zinc-500 dark:text-zinc-400 mb-5"
           >
-            Frontend / Full Stack Developer
+            Full Stack Developer
           </motion.p>
 
           <motion.p

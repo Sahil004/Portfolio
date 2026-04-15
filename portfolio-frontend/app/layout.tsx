@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import { Syne, DM_Sans } from "next/font/google";
+import { Sora, DM_Sans } from "next/font/google";
 
-const syne = Syne({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-heading",
   weight: ["400", "500", "600", "700", "800"],
 });
 
@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${syne.variable} ${dmSans.variable} font-sans`}>
+      <body className={`${sora.variable} ${dmSans.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
