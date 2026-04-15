@@ -30,17 +30,13 @@ export async function apiClient<T>(
             ? body
             : JSON.stringify(body)
           : undefined,
-      cache: options.cache || "no-cache",
     });
 
     const contentType = res.headers.get("content-type");
 
-    let data;
-    if (contentType?.includes("application/json")) {
-      data = await res.json();
-    } else {
-      data = await res.text();
-    }
+    const data = contentType?.includes("application/json")
+      ? await res.json()
+      : await res.text();
 
     if (!res.ok) {
       throw {
