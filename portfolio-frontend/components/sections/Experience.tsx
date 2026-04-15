@@ -171,7 +171,7 @@ function GroupBlock({ group }: { group: Group }) {
           </div>
 
           {/* sublabel */}
-          <p className="text-xs text-zinc-400 dark:text-zinc-500 whitespace-pre-line leading-relaxed mb-5">
+          <p className="text-xs text-zinc-400 dark:text-zinc-500 md:whitespace-pre-line leading-relaxed mb-5">
             {meta.sublabel}
           </p>
 
@@ -227,14 +227,14 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
+      className="py-10 md:py-14 px-6 md:px-12 lg:px-20 bg-light-bg dark:bg-dark-bg"
     >
       <SectionLabel>Experience &amp; Education</SectionLabel>
       <SectionTitle>
         My <AccentText>journey</AccentText>
       </SectionTitle>
 
-      <div className="mt-16 flex flex-col gap-24">
+      <div className="mt-8 md:mt-16 flex flex-col gap-12 md:gap-24">
         {groups.map((group, i) => (
           <GroupBlock key={i} group={group} />
         ))}

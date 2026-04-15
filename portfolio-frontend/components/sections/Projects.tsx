@@ -26,7 +26,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="py-14 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
+      className="py-10 md:py-14 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
     >
       <SectionLabel>Projects</SectionLabel>
       <SectionTitle>
@@ -93,11 +93,11 @@ export default function Projects() {
               >
                 {/* Thumbnail */}
                 <div
-                  className={`relative h-48 overflow-hidden bg-gradient-to-br ${project.gradient}`}
+                  className={`relative h-48 overflow-hidden bg-gradient-to-br `}
                 >
                   {/* Light mode gradient */}
                   <div
-                    className={`absolute inset-0 dark:hidden bg-gradient-to-br ${project.gradientLight}`}
+                    className={`absolute inset-0 dark:hidden bg-gradient-to-br `}
                   />
 
                   <Image

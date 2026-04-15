@@ -18,7 +18,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden px-6 md:px-12 lg:px-20 pt-[68px]"
+      className="relative md:min-h-screen flex items-center overflow-hidden px-6 md:px-12 lg:px-20 pt-[68px] py-14"
     >
       {/* Background orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

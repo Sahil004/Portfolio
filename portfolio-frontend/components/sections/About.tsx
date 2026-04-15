@@ -20,14 +20,14 @@ export default function About() {
   return (
     <section
       id="about"
-      className="pt-28 pb-14 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
+      className="pt-12 md:pt-28 pb-10 md:pb-14 px-6 md:px-12 lg:px-20 bg-light-bg-2 dark:bg-dark-bg-2"
     >
       <SectionLabel>About Me</SectionLabel>
       <SectionTitle>
         The developer <AccentText>behind the code</AccentText>
       </SectionTitle>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mt-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mt-12">
         {/* Left — graphic */}
         <FadeIn delay={0.1}>
           <div className="flex justify-center md:justify-start py-10 md:py-0">
