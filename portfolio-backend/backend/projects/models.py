@@ -56,8 +56,51 @@ class Technology(models.Model):
     def __str__(self):
         return self.name
 
-class Project(models.Model):
+from django.db import models
 
+
+from django.db import models
+
+
+class Journey(models.Model):
+    TYPE_CHOICES = [
+        ("company", "Company"),
+        ("education", "Education"),
+        ("certification", "Certification"),
+    ]
+
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    role = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255)
+
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+
+    image = models.ImageField(upload_to="journey/", blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-start_date", "-end_date"]
+
+    def __str__(self):
+        return f"{self.role} @ {self.organization}"
+
+class JourneyPoint(models.Model):
+    journey = models.ForeignKey(
+        Journey,
+        on_delete=models.CASCADE,
+        related_name="points"
+    )
+    text = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.text[:50]  
+from django.db import models
+
+
+class Project(models.Model):
     CATEGORY_CHOICES = [
         ("company", "Company"),
         ("college", "College"),
@@ -65,10 +108,14 @@ class Project(models.Model):
     ]
 
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True)
     description = models.TextField()
 
-    technologies = models.ManyToManyField(Technology, blank=True)
+    technologies = models.ManyToManyField(
+        "Technology",
+        blank=True,
+        related_name="projects"
+    )
 
     category = models.CharField(
         max_length=20,
@@ -76,10 +123,18 @@ class Project(models.Model):
         default="self"
     )
 
-    company = models.CharField(max_length=255, blank=True)
+    associated_with = models.ForeignKey(
+        "Journey",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="projects"
+    )
+
     github_url = models.URLField(blank=True)
     live_url = models.URLField(blank=True)
-    image = models.ImageField(upload_to='projects/')
+
+    image = models.ImageField(upload_to="projects/")
     featured = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

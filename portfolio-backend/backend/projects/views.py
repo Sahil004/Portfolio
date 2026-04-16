@@ -1,21 +1,28 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Project, Technology, Icon
-from .serializers import ProjectSerializer
+
+from .models import Journey, Project, Technology
+from .serializers import JourneySerializer, ProjectSerializer
 
 @api_view(['GET'])
 def get_projects(request):
-    projects = Project.objects.all().order_by('-created_at')
-    serializer = ProjectSerializer(projects, many=True)
+    projects = (
+        Project.objects
+        .select_related("associated_with")
+        .prefetch_related(
+            "technologies__icon",
+            "technologies__badge",
+            "associated_with__points",
+        )
+        .order_by("order", "-created_at")
+    )
+
+    serializer = ProjectSerializer(
+        projects,
+        many=True,
+        context={"request": request}  # 🔥 important for image URLs
+    )
     return Response(serializer.data)
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import Technology
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import Technology
 
 
 @api_view(['GET'])
@@ -25,7 +32,6 @@ def get_skills(request):
         .filter(is_active=True)
         .select_related("icon", "badge")
         .order_by("order", "name")
-        .all()
     )
 
     grouped = {}
@@ -33,10 +39,7 @@ def get_skills(request):
     for skill in skills:
         category_label = skill.get_category_display()
 
-        if category_label not in grouped:
-            grouped[category_label] = []
-
-        grouped[category_label].append({
+        grouped.setdefault(category_label, []).append({
             "sequence": skill.order,
             "name": skill.name,
             "icon": skill.icon.icon_key if skill.icon else None,
@@ -48,3 +51,19 @@ def get_skills(request):
         })
 
     return Response(grouped)
+
+
+@api_view(["GET"])
+def get_journey(request):
+    journeys = (
+        Journey.objects
+        .prefetch_related("points")
+        .order_by("-start_date", "-end_date")
+    )
+
+    serializer = JourneySerializer(
+        journeys,
+        many=True,
+        context={"request": request}  # 🔥 for image URL
+    )
+    return Response(serializer.data)
