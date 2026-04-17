@@ -2,7 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Journey, Project, Technology
-from .serializers import JourneySerializer, ProjectSerializer
+from .serializers import JourneySerializer, ProjectSerializer, TechnologySerializer
+
 
 @api_view(['GET'])
 def get_projects(request):
@@ -10,20 +11,17 @@ def get_projects(request):
         Project.objects
         .select_related("associated_with")
         .prefetch_related(
-            "tags",                         # ← add this
+            "tags",
             "technologies__icon",
             "technologies__badge",
             "associated_with__points",
         )
         .order_by("order", "-created_at")
     )
-
-    serializer = ProjectSerializer(
-        projects,
-        many=True,
-        context={"request": request}
-    )
+    serializer = ProjectSerializer(projects, many=True)
     return Response(serializer.data)
+
+
 @api_view(['GET'])
 def get_skills(request):
     skills = (
@@ -37,7 +35,6 @@ def get_skills(request):
 
     for skill in skills:
         category_label = skill.get_category_display()
-
         grouped.setdefault(category_label, []).append({
             "sequence": skill.order,
             "name": skill.name,
@@ -59,10 +56,5 @@ def get_journey(request):
         .prefetch_related("points")
         .order_by("-start_date", "-end_date")
     )
-
-    serializer = JourneySerializer(
-        journeys,
-        many=True,
-        context={"request": request}  # 🔥 for image URL
-    )
+    serializer = JourneySerializer(journeys, many=True)
     return Response(serializer.data)

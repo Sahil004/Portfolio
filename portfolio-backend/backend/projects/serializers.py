@@ -47,9 +47,8 @@ class JourneySerializer(serializers.ModelSerializer):
         ]
 
     def get_image(self, obj):
-        request = self.context.get("request")
         if obj.image:
-            return request.build_absolute_uri(obj.image.url)
+            return obj.image.url  # Cloudinary returns full CDN URL automatically
         return None
 
 
@@ -85,7 +84,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         ]
 
     def get_image(self, obj):
-        request = self.context.get("request")
         if obj.image:
-            return request.build_absolute_uri(obj.image.url)
+            return obj.image.url  # Cloudinary returns full CDN URL automatically
         return None
