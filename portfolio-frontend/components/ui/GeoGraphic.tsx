@@ -2,7 +2,11 @@ import { motion } from "framer-motion";
 
 const stats = [
   { value: "1.6+", label: "Years exp.", pos: "top-2 -left-6" },
-  { value: "3+", label: "Products", pos: "top-1/2 -right-7 -translate-y-1/2" },
+  {
+    value: "7+",
+    label: " Live Projects",
+    pos: "top-1/2 -right-7 -translate-y-1/2",
+  },
   {
     value: "8.6",
     label: "MCS GPA",

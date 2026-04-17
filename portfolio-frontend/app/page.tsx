@@ -7,11 +7,13 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/ui/Footer";
-import { getSkills } from "@/lib/api/apiHelperFunction";
+import { getJourney, getSkills } from "@/lib/api/apiHelperFunction";
 
 export default async function Home() {
   const skills = await getSkills();
   console.log("Fetched skills:", skills);
+  const journey = await getJourney();
+  console.log("Fetched journey:", journey);
   return (
     <main className="relative">
       <ScrollProgress />
@@ -20,7 +22,7 @@ export default async function Home() {
       <About />
       <Skills skills={skills} />
       <Projects />
-      <Experience />
+      <Experience journey={journey} />
       <Contact />
       <Footer />
     </main>
