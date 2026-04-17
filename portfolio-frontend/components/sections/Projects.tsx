@@ -3,14 +3,27 @@
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Building2, Lock } from "lucide-react";
-import { PROJECTS, PROJECT_CATEGORIES } from "@/lib/data";
+import {
+  ExternalLink,
+  Github,
+  Building2,
+  Lock,
+  GraduationCap,
+  User,
+} from "lucide-react";
 import {
   SectionLabel,
   SectionTitle,
   AccentText,
 } from "@/components/ui/SectionHeader";
-import { FadeUp } from "@/components/ui/Motion";
+import { Project } from "@/lib/types/projectsType";
+
+/* ── constants ── */
+const PROJECT_CATEGORIES = [
+  { id: "company", label: "Company" },
+  { id: "college", label: "College" },
+  { id: "self", label: "Self" },
+];
 
 const CATEGORY_DESC: Record<string, string> = {
   company:
@@ -19,9 +32,208 @@ const CATEGORY_DESC: Record<string, string> = {
   self: "Side projects I built independently to explore new ideas.",
 };
 
-export default function Projects() {
-  const [activeCategory, setActiveCategory] = useState("company");
-  const filtered = PROJECTS.filter((p) => p.category === activeCategory);
+const CATEGORY_ICON: Record<string, React.ReactNode> = {
+  company: <Building2 size={10} className="opacity-70" />,
+  college: <GraduationCap size={10} className="opacity-70" />,
+  self: <User size={10} className="opacity-70" />,
+};
+
+/* ── tech pill ── */
+function TechPill({ name }: { name: string }) {
+  return (
+    <span
+      className="text-[10px] px-2 py-0.5 rounded-full font-medium
+        bg-black/[0.04] dark:bg-white/[0.06]
+        border border-black/8 dark:border-white/8
+        text-zinc-500 dark:text-zinc-400"
+    >
+      {name}
+    </span>
+  );
+}
+
+/* ── tag pill ── */
+function TagPill({ label, color }: { label: string; color: string }) {
+  return (
+    <span
+      className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold"
+      style={{
+        color,
+        background: `${color}14`,
+        border: `0.5px solid ${color}40`,
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
+/* ── project card ── */
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const hasGithub = !!project.github_url;
+  const hasLive = !!project.live_url;
+  const isPrivate = !hasGithub;
+
+  const orgName = project.associated_with?.organization ?? null;
+  const orgImage = project.associated_with?.image ?? null;
+  console.log("Project:", orgImage);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08, duration: 0.3 }}
+      whileHover={{ y: -6 }}
+      className="group flex flex-col rounded-2xl overflow-hidden
+        border border-black/8 dark:border-white/[0.07]
+        bg-white dark:bg-white/[0.03]
+        hover:border-[#6e73ff]/35 dark:hover:border-[#6e73ff]/35
+        hover:shadow-[0_16px_48px_rgba(110,115,255,0.12)]
+        transition-all duration-300"
+    >
+      {/* ── thumbnail ── */}
+      <div className="relative h-48 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(max-width:640px) 100vw, 33vw"
+          className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+        />
+
+        {/* bottom gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
+
+        {/* org badge — bottom left */}
+        {orgName && (
+          <div
+            className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5
+            px-2.5 py-1 rounded-lg
+            bg-black/50 backdrop-blur-sm
+            border border-white/10 text-white text-[10px] font-medium max-w-[60%]"
+          >
+            {orgImage ? (
+              <div className="relative w-3.5 h-3.5 rounded-sm overflow-hidden shrink-0">
+                <Image
+                  src={orgImage}
+                  alt={orgName}
+                  fill
+                  sizes="14px"
+                  className="object-contain"
+                />
+              </div>
+            ) : (
+              CATEGORY_ICON[project.category]
+            )}
+            <span className="truncate">{orgName}</span>
+          </div>
+        )}
+
+        {/* private badge — top right */}
+        {isPrivate && (
+          <div
+            className="absolute top-3 right-3 z-20 flex items-center gap-1
+            px-2 py-1 rounded-lg
+            bg-black/40 backdrop-blur-sm
+            border border-white/10 text-white/60 text-[10px]"
+          >
+            <Lock size={9} />
+            Private
+          </div>
+        )}
+      </div>
+
+      {/* ── body ── */}
+      <div className="flex flex-col flex-1 p-5 gap-3">
+        {/* title */}
+        <h3 className="font-display text-base font-bold tracking-tight text-zinc-900 dark:text-white leading-snug">
+          {project.title}
+        </h3>
+
+        {/* tags */}
+        {project.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {project.tags.map((tag) => (
+              <TagPill key={tag.id} label={tag.label} color={tag.color} />
+            ))}
+          </div>
+        )}
+
+        {/* description */}
+        <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed flex-1">
+          {project.description}
+        </p>
+
+        {/* tech stack */}
+        {project.technologies.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {project.technologies.map((tech) => (
+              <TechPill key={tech.id} name={tech.name} />
+            ))}
+          </div>
+        )}
+
+        {/* divider */}
+        <div className="h-px bg-black/5 dark:bg-white/5" />
+
+        {/* links */}
+        <div className="flex gap-2">
+          {hasLive && (
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              href={project.live_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex items-center justify-center gap-1.5
+                text-xs font-medium py-2 rounded-lg
+                bg-[#6e73ff] text-white
+                hover:bg-[#5a5fdd]
+                shadow-[0_0_16px_rgba(110,115,255,0.3)]
+                hover:shadow-[0_0_24px_rgba(110,115,255,0.45)]
+                transition-all duration-200
+                ${hasGithub ? "flex-1" : "w-full"}`}
+            >
+              <ExternalLink size={11} />
+              Live Demo
+            </motion.a>
+          )}
+
+          {hasGithub && (
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              href={project.github_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex items-center justify-center gap-1.5
+                text-xs font-medium py-2 rounded-lg
+                border border-black/8 dark:border-white/8
+                text-zinc-500 dark:text-zinc-400
+                hover:bg-black/5 dark:hover:bg-white/5
+                transition-all duration-200
+                ${hasLive ? "flex-1" : "w-full"}`}
+            >
+              <Github size={11} />
+              GitHub
+            </motion.a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── section ── */
+export default function Projects({ projects }: { projects: Project[] }) {
+  const categories = PROJECT_CATEGORIES.filter((cat) =>
+    projects.some((p) => p.category === cat.id),
+  );
+
+  const [activeCategory, setActiveCategory] = useState(
+    categories[0]?.id ?? "company",
+  );
+
+  const filtered = projects.filter((p) => p.category === activeCategory);
 
   return (
     <section
@@ -33,9 +245,9 @@ export default function Projects() {
         Things I&apos;ve <AccentText>built</AccentText>
       </SectionTitle>
 
-      {/* Tabs */}
+      {/* tabs — only show categories that have projects */}
       <div className="flex flex-wrap items-end gap-0 mt-10 border-b border-black/8 dark:border-white/8">
-        {PROJECT_CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
@@ -62,7 +274,7 @@ export default function Projects() {
         {CATEGORY_DESC[activeCategory]}
       </p>
 
-      {/* Grid */}
+      {/* grid */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeCategory}
@@ -78,133 +290,7 @@ export default function Projects() {
             </div>
           ) : (
             filtered.map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.3 }}
-                whileHover={{ y: -6 }}
-                className="group flex flex-col rounded-2xl overflow-hidden
-                  border border-black/8 dark:border-white/[0.07]
-                  bg-white dark:bg-white/[0.03]
-                  hover:border-[#6e73ff]/35 dark:hover:border-[#6e73ff]/35
-                  hover:shadow-[0_16px_48px_rgba(110,115,255,0.12)]
-                  transition-all duration-300"
-              >
-                {/* Thumbnail */}
-                <div
-                  className={`relative h-48 overflow-hidden bg-gradient-to-br `}
-                >
-                  {/* Light mode gradient */}
-                  <div
-                    className={`absolute inset-0 dark:hidden bg-gradient-to-br `}
-                  />
-
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width:640px) 100vw, 33vw"
-                    className="relative z-10 object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
-                  />
-
-                  {/* Overlay gradient at bottom */}
-                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-                  {/* Company badge — bottom left of image */}
-                  {project.company && (
-                    <div
-                      className="absolute bottom-3 left-3 z-30 flex items-center gap-1.5
-                      px-2.5 py-1 rounded-lg
-                      bg-black/50 backdrop-blur-sm
-                      border border-white/10 text-white text-[10px] font-medium"
-                    >
-                      <Building2 size={10} className="opacity-70" />
-                      {project.company}
-                    </div>
-                  )}
-
-                  {/* Private indicator */}
-                  {project.github === "#" && (
-                    <div
-                      className="absolute top-3 right-3 z-30 flex items-center gap-1
-                      px-2 py-1 rounded-lg
-                      bg-black/40 backdrop-blur-sm
-                      border border-white/10 text-white/60 text-[10px]"
-                    >
-                      <Lock size={9} />
-                      Private
-                    </div>
-                  )}
-                </div>
-
-                {/* Body */}
-                <div className="flex flex-col flex-1 p-5 gap-3">
-                  <h3 className="font-display text-base font-bold tracking-tight text-zinc-900 dark:text-white">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed flex-1">
-                    {project.desc}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[11px] px-2.5 py-0.5 rounded-full
-                          bg-black/[0.04] dark:bg-white/[0.05]
-                          border border-black/8 dark:border-white/8
-                          text-zinc-500 dark:text-zinc-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Divider */}
-                  <div className="h-px bg-black/5 dark:bg-white/5" />
-
-                  {/* Links */}
-                  <div className="flex gap-2">
-                    <motion.a
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5
-                        text-xs font-medium py-2 rounded-lg
-                        bg-[#6e73ff] text-white
-                        hover:bg-[#5a5fdd]
-                        shadow-[0_0_16px_rgba(110,115,255,0.3)]
-                        hover:shadow-[0_0_24px_rgba(110,115,255,0.45)]
-                        transition-all duration-200"
-                    >
-                      <ExternalLink size={11} />
-                      Live Demo
-                    </motion.a>
-
-                    <motion.a
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5
-                        text-xs font-medium py-2 rounded-lg
-                        border border-black/8 dark:border-white/8
-                        text-zinc-500 dark:text-zinc-400
-                        hover:bg-black/5 dark:hover:bg-white/5
-                        transition-all duration-200"
-                    >
-                      <Github size={11} />
-                      GitHub
-                    </motion.a>
-                  </div>
-                </div>
-              </motion.div>
+              <ProjectCard key={project.id} project={project} index={i} />
             ))
           )}
         </motion.div>
