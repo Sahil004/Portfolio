@@ -14,3 +14,14 @@ export async function getJourney(): Promise<Journey[]> {
 export async function getProjects(): Promise<Project[]> {
   return apiClient<Project[]>("/projects/", { revalidate: 60 });
 }
+
+export async function sendContact(form: {
+  name: string;
+  email: string;
+  message: string;
+}) {
+  return apiClient("/contact/", {
+    method: "POST",
+    body: form,
+  });
+}

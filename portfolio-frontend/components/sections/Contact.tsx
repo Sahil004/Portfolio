@@ -10,6 +10,7 @@ import {
   AccentText,
 } from "@/components/ui/SectionHeader";
 import { FadeUp } from "@/components/ui/Motion";
+import { sendContact } from "@/lib/api/apiHelperFunction";
 
 const INPUT_CLASS = `w-full px-4 py-3 rounded-xl text-sm
   bg-black/[0.03] dark:bg-white/[0.03]
@@ -32,15 +33,25 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!form.name || !form.email || !form.message) {
       setStatus("error");
       return;
     }
-    setStatus("sending");
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("success");
-    setForm({ name: "", email: "", message: "" });
-    setTimeout(() => setStatus("idle"), 5000);
+
+    try {
+      setStatus("sending");
+
+      await sendContact(form); // 🔥 REAL API CALL
+
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" });
+
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
