@@ -14,6 +14,7 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   weight: ["300", "400", "500"],
 });
+
 export const metadata: Metadata = {
   title: "Sahil Sayyad — Full Stack Developer",
   description:
@@ -31,6 +32,13 @@ export const metadata: Metadata = {
     title: "Sahil Sayyad — Full Stack Developer",
     description: "Building scalable, high-performance web applications.",
     type: "website",
+  },
+
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png" }, // fallback
+    ],
   },
 };
 

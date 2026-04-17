@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -38,16 +39,19 @@ export default function Navbar() {
           "transition-all duration-300",
           scrolled
             ? "bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-xl border-b border-black/5 dark:border-white/5"
-            : "bg-transparent"
+            : "bg-transparent",
         )}
       >
         {/* Logo */}
         <a
           href="#hero"
-          onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick("#hero");
+          }}
           className="font-display text-xl font-extrabold tracking-tight text-zinc-900 dark:text-white"
         >
-          SS<span className="text-[#6e73ff]">.</span>
+          <Logo />
         </a>
 
         {/* Desktop Links */}

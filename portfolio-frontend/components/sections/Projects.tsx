@@ -76,7 +76,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   const orgName = project.associated_with?.organization ?? null;
   const orgImage = project.associated_with?.image ?? null;
-  console.log("Project:", orgImage);
+  const descriptionLines = project.description
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const [showAll, setShowAll] = useState(false);
+  const visibleLines = showAll
+    ? descriptionLines
+    : descriptionLines.slice(0, 3);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -97,11 +105,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           alt={project.title}
           fill
           sizes="(max-width:640px) 100vw, 33vw"
-          className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+          className="object-contain opacity-90 group-hover:scale-105 transition-transform duration-500 p-4 md:p-8"
         />
 
         {/* bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" /> */}
 
         {/* org badge — bottom left */}
         {orgName && (
@@ -159,9 +167,27 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         )}
 
         {/* description */}
-        <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed flex-1">
-          {project.description}
-        </p>
+        <ul className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed flex-1">
+          {visibleLines.map((line, i) => (
+            <li key={i} className="relative pl-4">
+              <span
+                className="absolute left-0 top-[0.55em] w-1 h-1 rounded-full"
+                style={{ background: "#6e73ff" }}
+              />
+              {line}
+            </li>
+          ))}
+        </ul>
+
+        {descriptionLines.length > 3 && (
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="self-start text-xs font-semibold text-[#6e73ff] hover:text-[#5a5fdd] transition-colors duration-200"
+          >
+            {showAll ? "Show less" : "Read more"}
+          </button>
+        )}
 
         {/* tech stack */}
         {project.technologies.length > 0 && (
