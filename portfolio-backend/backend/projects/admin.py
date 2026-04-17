@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Badge, JourneyPoint, Project, Technology, Icon, Journey
+from .models import Badge, JourneyPoint, Project, ProjectTag, Technology, Icon, Journey
 
+
+@admin.register(ProjectTag)
+class ProjectTagAdmin(admin.ModelAdmin):
+    list_display = ("label", "color")
+    search_fields = ("label",)
 
 
 @admin.register(Technology)
@@ -16,20 +21,22 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ("title", "category", "featured", "associated_with")
     list_filter = ("category", "featured")
     search_fields = ("title",)
-    filter_horizontal = ("technologies",)
+    filter_horizontal = ("technologies", "tags")   # ← add tags here
     autocomplete_fields = ("associated_with",)
+
 
 @admin.register(Icon)
 class IconAdmin(admin.ModelAdmin):
     list_display = ("name", "icon_key", "icon_class")
     search_fields = ("name",)
 
+
 @admin.register(Badge)
 class BadgeAdmin(admin.ModelAdmin):
     list_display = ("label", "color")
     search_fields = ("label",)
 
-    
+
 class JourneyPointInline(admin.TabularInline):
     model = JourneyPoint
     extra = 1

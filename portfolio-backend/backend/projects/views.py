@@ -10,6 +10,7 @@ def get_projects(request):
         Project.objects
         .select_related("associated_with")
         .prefetch_related(
+            "tags",                         # ← add this
             "technologies__icon",
             "technologies__badge",
             "associated_with__points",
@@ -20,11 +21,9 @@ def get_projects(request):
     serializer = ProjectSerializer(
         projects,
         many=True,
-        context={"request": request}  # 🔥 important for image URLs
+        context={"request": request}
     )
     return Response(serializer.data)
-
-
 @api_view(['GET'])
 def get_skills(request):
     skills = (

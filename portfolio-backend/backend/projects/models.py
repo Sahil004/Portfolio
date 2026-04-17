@@ -100,6 +100,14 @@ class JourneyPoint(models.Model):
 from django.db import models
 
 
+class ProjectTag(models.Model):
+    label = models.CharField(max_length=100)  # "eCommerce", "0.1s Load", "SEO Friendly"
+    color = models.CharField(max_length=50, blank=True)  # optional accent color hex
+
+    def __str__(self):
+        return self.label
+
+
 class Project(models.Model):
     CATEGORY_CHOICES = [
         ("company", "Company"),
@@ -110,6 +118,12 @@ class Project(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField()
+
+    tags = models.ManyToManyField(
+        "ProjectTag",
+        blank=True,
+        related_name="projects"
+    )
 
     technologies = models.ManyToManyField(
         "Technology",

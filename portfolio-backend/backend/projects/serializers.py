@@ -1,15 +1,18 @@
 from rest_framework import serializers
-from .models import Project, Technology, Icon, Badge, Journey, JourneyPoint
+from .models import Project, Technology, Icon, Badge, Journey, JourneyPoint, ProjectTag
+
 
 class IconSerializer(serializers.ModelSerializer):
     class Meta:
         model = Icon
         fields = ["icon_key", "icon_class"]
 
+
 class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Badge
         fields = ["label", "color"]
+
 
 class TechnologySerializer(serializers.ModelSerializer):
     icon = IconSerializer(read_only=True)
@@ -19,10 +22,12 @@ class TechnologySerializer(serializers.ModelSerializer):
         model = Technology
         fields = ["id", "name", "icon", "badge"]
 
+
 class JourneyPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = JourneyPoint
         fields = ["text"]
+
 
 class JourneySerializer(serializers.ModelSerializer):
     points = JourneyPointSerializer(many=True, read_only=True)
@@ -46,9 +51,18 @@ class JourneySerializer(serializers.ModelSerializer):
         if obj.image:
             return request.build_absolute_uri(obj.image.url)
         return None
+
+
+class ProjectTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectTag
+        fields = ["id", "label", "color"]
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     technologies = TechnologySerializer(many=True, read_only=True)
     associated_with = JourneySerializer(read_only=True)
+    tags = ProjectTagSerializer(many=True, read_only=True)
     image = serializers.SerializerMethodField()
 
     class Meta:
@@ -58,6 +72,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "title",
             "slug",
             "description",
+            "tags",
             "category",
             "associated_with",
             "technologies",
