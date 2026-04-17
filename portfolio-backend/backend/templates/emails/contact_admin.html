@@ -1,12 +1,78 @@
 <!doctype html>
 <html>
 
-<body style="font-family: Arial, sans-serif; line-height: 1.6;">
-    <h2>New Contact Message</h2>
-    <p><strong>Name:</strong> {{ name }}</p>
-    <p><strong>Email:</strong> {{ email }}</p>
-    <p><strong>Message:</strong></p>
-    <p>{{ message|linebreaksbr }}</p>
+<body style="margin:0; padding:0; background:#0b0b12; font-family: Inter, Arial, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+        <tr>
+            <td align="center">
+
+                <!-- Card -->
+                <table width="600" cellpadding="0" cellspacing="0" style="background:rgba(255,255,255,0.04);
+                   border:1px solid rgba(255,255,255,0.08);
+                   border-radius:16px;
+                   backdrop-filter: blur(10px);
+                   padding:32px;
+                   color:#e4e4e7;">
+
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding-bottom:20px;">
+                            <h2 style="margin:0; font-size:20px; font-weight:600;">
+                                🚀 New Contact Message
+                            </h2>
+                            <p style="margin:6px 0 0; font-size:12px; color:#a1a1aa;">
+                                Someone reached out from your portfolio
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td>
+                            <div
+                                style="height:1px; background:linear-gradient(to right,#6e73ff33,#3ecfb833,transparent); margin:16px 0;">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Content -->
+                    <tr>
+                        <td style="font-size:14px; line-height:1.6;">
+
+                            <p>
+                                <span style="color:#6e73ff; font-weight:600;">Name:</span><br>
+                                {{ name }}
+                            </p>
+
+                            <p>
+                                <span style="color:#6e73ff; font-weight:600;">Email:</span><br>
+                                {{ email }}
+                            </p>
+
+                            <p>
+                                <span style="color:#6e73ff; font-weight:600;">Message:</span><br>
+                                <span style="color:#d4d4d8;">{{ message|linebreaksbr }}</span>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding-top:24px;">
+                            <p style="font-size:11px; color:#71717a;">
+                                Portfolio Contact System • Sahil
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
 </body>
 
 </html>
