@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Badge, JourneyPoint, Project, ProjectTag, Technology, Icon, Journey
+from .models import Badge, JourneyPoint, Project, ProjectTag, Technology, Icon, Journey, ContactMessage
 
 
 @admin.register(ProjectTag)
@@ -48,3 +48,10 @@ class JourneyAdmin(admin.ModelAdmin):
     list_filter = ("type",)
     search_fields = ("role", "organization")
     inlines = [JourneyPointInline]
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "is_read", "created_at")
+    list_filter = ("is_read", "created_at")
+    search_fields = ("name", "email", "message")
+    readonly_fields = ("created_at",)

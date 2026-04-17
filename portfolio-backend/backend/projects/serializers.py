@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Technology, Icon, Badge, Journey, JourneyPoint, ProjectTag
+from .models import Project, Technology, Icon, Badge, Journey, JourneyPoint, ProjectTag, ContactMessage
 
 
 class IconSerializer(serializers.ModelSerializer):
@@ -87,3 +87,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         if obj.image:
             return obj.image.url  # Cloudinary returns full CDN URL automatically
         return None
+    
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ["name", "email", "message"]
