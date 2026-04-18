@@ -42,7 +42,6 @@ export default function Navbar() {
             : "bg-transparent",
         )}
       >
-        {/* Logo */}
         <a
           href="#hero"
           onClick={(e) => {
