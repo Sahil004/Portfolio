@@ -1,78 +1,96 @@
 <!doctype html>
 <html>
 
-<body style="margin:0; padding:0; background:#0b0b12; font-family: Inter, Arial, sans-serif;">
-
+<body style="margin:0;padding:0;background:#0b0b12;font-family:Inter,Arial,sans-serif;">
     <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
         <tr>
             <td align="center">
+                <table width="580" cellpadding="0" cellspacing="0"
+                    style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;color:#e4e4e7;">
 
-                <!-- Card -->
-                <table width="600" cellpadding="0" cellspacing="0" style="background:rgba(255,255,255,0.04);
-                   border:1px solid rgba(255,255,255,0.08);
-                   border-radius:16px;
-                   backdrop-filter: blur(10px);
-                   padding:32px;
-                   color:#e4e4e7;">
-
-                    <!-- Header -->
-                    <tr>
-                        <td style="padding-bottom:20px;">
-                            <h2 style="margin:0; font-size:20px; font-weight:600;">
-                                🚀 New Contact Message
-                            </h2>
-                            <p style="margin:6px 0 0; font-size:12px; color:#a1a1aa;">
-                                Someone reached out from your portfolio
-                            </p>
-                        </td>
-                    </tr>
-
-                    <!-- Divider -->
+                    <!-- accent bar -->
                     <tr>
                         <td>
                             <div
-                                style="height:1px; background:linear-gradient(to right,#6e73ff33,#3ecfb833,transparent); margin:16px 0;">
+                                style="height:3px;border-radius:2px;background:linear-gradient(to right,#6e73ff,#3ecfb8,#ff6e9c);margin-bottom:28px;">
                             </div>
                         </td>
                     </tr>
 
-                    <!-- Content -->
+                    <!-- logo -->
                     <tr>
-                        <td style="font-size:14px; line-height:1.6;">
-
-                            <p>
-                                <span style="color:#6e73ff; font-weight:600;">Name:</span><br>
-                                {{ name }}
-                            </p>
-
-                            <p>
-                                <span style="color:#6e73ff; font-weight:600;">Email:</span><br>
-                                {{ email }}
-                            </p>
-
-                            <p>
-                                <span style="color:#6e73ff; font-weight:600;">Message:</span><br>
-                                <span style="color:#d4d4d8;">{{ message|linebreaksbr }}</span>
-                            </p>
-
+                        <td style="padding-bottom:20px;">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="padding-right:10px;">
+                                        <div
+                                            style="width:40px;height:40px;border-radius:12px;background:rgba(110,115,255,0.15);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;color:#fff;line-height:40px;">
+                                            SS</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size:16px;font-weight:600;color:#fff;">Sahil<span
+                                                style="color:#3ecfb8;">.</span><span style="color:#6e73ff;">dev</span>
+                                        </div>
+                                        <div style="font-size:10px;color:#52525b;letter-spacing:1px;">PORTFOLIO</div>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
 
-                    <!-- Footer -->
+                    <!-- badge + title -->
                     <tr>
-                        <td style="padding-top:24px;">
-                            <p style="font-size:11px; color:#71717a;">
-                                Portfolio Contact System • Sahil
-                            </p>
+                        <td style="padding-bottom:16px;">
+                            <span
+                                style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(110,115,255,0.1);color:#6e73ff;border:0.5px solid rgba(110,115,255,0.3);">New
+                                message</span>
+                            <h2 style="margin:10px 0 4px;font-size:18px;font-weight:600;color:#f4f4f5;">Someone reached
+                                out</h2>
+                            <p style="margin:0;font-size:12px;color:#71717a;">via your portfolio contact form</p>
+                        </td>
+                    </tr>
+
+                    <!-- divider -->
+                    <tr>
+                        <td>
+                            <div
+                                style="height:1px;background:linear-gradient(to right,#6e73ff44,#3ecfb844,transparent);margin:4px 0 20px;">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- fields -->
+                    <tr>
+                        <td style="font-size:14px;line-height:1.6;">
+                            <p style="margin:0 0 4px;"><span
+                                    style="color:#6e73ff;font-weight:600;font-size:12px;">NAME</span></p>
+                            <p style="margin:0 0 16px;color:#d4d4d8;">{{ name }}</p>
+
+                            <p style="margin:0 0 4px;"><span
+                                    style="color:#6e73ff;font-weight:600;font-size:12px;">EMAIL</span></p>
+                            <p style="margin:0 0 16px;"><a href="mailto:{{ email }}"
+                                    style="color:#6e73ff;text-decoration:none;">{{ email }}</a></p>
+
+                            <p style="margin:0 0 4px;"><span
+                                    style="color:#6e73ff;font-weight:600;font-size:12px;">MESSAGE</span></p>
+                            <div
+                                style="background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;color:#d4d4d8;margin-bottom:8px;">
+                                {{ message|linebreaksbr }}</div>
+                        </td>
+                    </tr>
+
+                    <!-- footer -->
+                    <tr>
+                        <td style="padding-top:20px;border-top:1px solid rgba(255,255,255,0.06);">
+                            <p style="font-size:11px;color:#3f3f46;margin:0;">Portfolio Contact System &nbsp;·&nbsp;
+                                Sahil Sayyad</p>
                         </td>
                     </tr>
 
                 </table>
-
             </td>
         </tr>
     </table>
-
 </body>
 
 </html>

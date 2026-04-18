@@ -100,7 +100,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-[68px] left-0 right-0 z-40 bg-light-bg-2 dark:bg-dark-bg-2 border-b border-black/5 dark:border-white/5 px-6 py-5 md:hidden"
+            className="fixed top-[68px] left-0 right-0 z-40 bg-light-bg dark:bg-dark-bg border-b border-black/8 dark:border-white/8 px-6 py-5 md:hidden shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
           >
             <ul className="flex flex-col gap-4 list-none">
               {NAV_LINKS.map((link, i) => (

@@ -7,12 +7,15 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/ui/Footer";
-import { getJourney, getProjects, getSkills } from "@/lib/api/apiHelperFunction";
+import {
+  getJourney,
+  getProjects,
+  getSkills,
+} from "@/lib/api/apiHelperFunction";
 
 export default async function Home() {
   const skills = await getSkills();
   const journey = await getJourney();
-  console.log("Journey data:", journey); // Debug log for journey data
   const projects = await getProjects();
 
   return (
