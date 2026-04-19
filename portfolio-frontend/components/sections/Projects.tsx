@@ -385,7 +385,6 @@ export default function Projects({ projects }: { projects: Project[] }) {
               No projects in this category yet — check back soon.
             </div>
           ) : (
-            // Wrap the Swiper in a div with overflow-hidden
             <div className="overflow-hidden">
               <Swiper
                 modules={[Navigation, Pagination, A11y]}
