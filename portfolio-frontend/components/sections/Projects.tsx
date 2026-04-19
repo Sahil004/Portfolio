@@ -386,7 +386,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
             </div>
           ) : (
             // Wrap the Swiper in a div with overflow-hidden
-            <div className="overflow-hidden pb-4 md:pb-10">
+            <div className="overflow-hidden">
               <Swiper
                 modules={[Navigation, Pagination, A11y]}
                 onSwiper={setSwiperRef}
