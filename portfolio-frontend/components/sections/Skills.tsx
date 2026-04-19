@@ -144,7 +144,12 @@ export default function Skills({
                 <div className="w-12 h-12 flex items-center justify-center">
                   {Icon && (
                     <Icon
-                      className={`w-8 md:w-10 h-8 md:h-10 transition-all duration-200 ${skill.iconClass ?? "text-zinc-400"}`}
+                      className="icon-hover w-8 md:w-10 h-8 md:h-10 transition-all duration-200 text-zinc-700 dark:text-zinc-300"
+                      style={
+                        {
+                          "--hover-color": skill.iconClass ?? "currentColor",
+                        } as React.CSSProperties
+                      }
                       aria-hidden
                     />
                   )}

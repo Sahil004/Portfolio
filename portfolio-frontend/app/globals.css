@@ -31,6 +31,14 @@ body {
   font-family: var(--font-heading);
 }
 
+.group:hover .icon-hover {
+  color: var(--hover-color);
+}
+
+.icon-hover {
+  transition: color 0.2s ease;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
@@ -154,4 +162,14 @@ body {
   to {
     stroke-dashoffset: 0;
   }
+}
+
+.swiper-pagination-bullet {
+  background: #6e73ff;
+  opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+  background: #6e73ff;
+  opacity: 1;
 }

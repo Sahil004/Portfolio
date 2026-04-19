@@ -15,6 +15,7 @@ import {
 
 export default async function Home() {
   const skills = await getSkills();
+  console.log(skills);
   const journey = await getJourney();
   const projects = await getProjects();
 

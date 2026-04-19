@@ -6,7 +6,7 @@ export type Badge = {
 export type Skill = {
   name: string;
   icon: string | null;
-  iconClass: string;
+  iconClass: React.CSSProperties;
   badge: Badge | null;
 };
 

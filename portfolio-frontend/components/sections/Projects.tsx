@@ -10,7 +10,16 @@ import {
   Lock,
   GraduationCap,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, A11y, Pagination } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
+
+// ← critical: without these the slides stack vertically
+import "swiper/swiper-bundle.css";
+
 import {
   SectionLabel,
   SectionTitle,
@@ -43,9 +52,9 @@ function TechPill({ name }: { name: string }) {
   return (
     <span
       className="text-[10px] px-2 py-0.5 rounded-full font-medium
-        bg-black/[0.04] dark:bg-white/[0.06]
-        border border-black/8 dark:border-white/8
-        text-zinc-500 dark:text-zinc-400"
+      bg-black/[0.04] dark:bg-white/[0.06]
+      border border-black/8 dark:border-white/8
+      text-zinc-500 dark:text-zinc-400"
     >
       {name}
     </span>
@@ -69,17 +78,19 @@ function TagPill({ label, color }: { label: string; color: string }) {
 }
 
 /* ── project card ── */
+/* ── project card ── */
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasGithub = !!project.github_url;
   const hasLive = !!project.live_url;
   const isPrivate = !hasGithub;
-
   const orgName = project.associated_with?.organization ?? null;
   const orgImage = project.associated_with?.image ?? null;
+
   const descriptionLines = project.description
     .split(/\r?\n/)
-    .map((line) => line.trim())
+    .map((l) => l.trim())
     .filter(Boolean);
+
   const [showAll, setShowAll] = useState(false);
   const visibleLines = showAll
     ? descriptionLines
@@ -89,35 +100,31 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08, duration: 0.3 }}
-      whileHover={{ y: -6 }}
-      className="group flex flex-col rounded-2xl overflow-hidden
+      transition={{ delay: index * 0.06, duration: 0.3 }}
+      whileHover={{ y: -4 }}
+      // ← h-full so SwiperSlide stretches it to match tallest card in row
+      className="group flex flex-col h-full rounded-2xl overflow-hidden
         border border-black/8 dark:border-white/[0.07]
         bg-white dark:bg-white/[0.03]
         hover:border-[#6e73ff]/35 dark:hover:border-[#6e73ff]/35
         hover:shadow-[0_16px_48px_rgba(110,115,255,0.12)]
         transition-all duration-300"
     >
-      {/* ── thumbnail ── */}
-      <div className="relative h-48 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+      {/* ── thumbnail — fixed height, never shrinks ── */}
+      <div className="relative h-44 shrink-0 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
         <Image
           src={project.image}
           alt={project.title}
           fill
-          sizes="(max-width:640px) 100vw, 33vw"
-          className="object-contain opacity-90 group-hover:scale-105 transition-transform duration-500 p-4 md:p-8"
+          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+          className="object-contain opacity-90 group-hover:scale-105 transition-transform duration-500 p-4 md:p-6"
         />
 
-        {/* bottom gradient */}
-        {/* <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" /> */}
-
-        {/* org badge — bottom left */}
         {orgName && (
           <div
             className="absolute bottom-3 left-3 z-20 flex items-center gap-1.5
-            px-2.5 py-1 rounded-lg
-            bg-black/50 backdrop-blur-sm
-            border border-white/10 text-white text-[10px] font-medium max-w-[60%]"
+            px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-sm
+            border border-white/10 text-white text-[10px] font-medium max-w-[65%]"
           >
             {orgImage ? (
               <div className="relative w-3.5 h-3.5 rounded-sm overflow-hidden shrink-0">
@@ -136,12 +143,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         )}
 
-        {/* private badge — top right */}
         {isPrivate && (
           <div
             className="absolute top-3 right-3 z-20 flex items-center gap-1
-            px-2 py-1 rounded-lg
-            bg-black/40 backdrop-blur-sm
+            px-2 py-1 rounded-lg bg-black/40 backdrop-blur-sm
             border border-white/10 text-white/60 text-[10px]"
           >
             <Lock size={9} />
@@ -152,46 +157,53 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       {/* ── body ── */}
       <div className="flex flex-col flex-1 p-5 gap-3">
-        {/* title */}
-        <h3 className="font-display text-base font-bold tracking-tight text-zinc-900 dark:text-white leading-snug">
+        {/* title — fixed, never grows */}
+        <h3 className="font-display text-sm font-bold tracking-tight text-zinc-900 dark:text-white leading-snug shrink-0">
           {project.title}
         </h3>
 
-        {/* tags */}
+        {/* tags — fixed, never grows */}
         {project.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 shrink-0">
             {project.tags.map((tag) => (
               <TagPill key={tag.id} label={tag.label} color={tag.color} />
             ))}
           </div>
         )}
 
-        {/* description */}
-        <ul className="flex flex-col gap-2 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed flex-1">
-          {visibleLines.map((line, i) => (
-            <li key={i} className="relative pl-4">
-              <span
-                className="absolute left-0 top-[0.55em] w-1 h-1 rounded-full"
-                style={{ background: "#6e73ff" }}
-              />
-              {line}
-            </li>
-          ))}
-        </ul>
+        {/* description — this is the only flex-1 section, absorbs all extra space */}
+        <div className="flex flex-col flex-1 gap-1.5 min-h-0">
+          <ul className="flex flex-col gap-1.5">
+            {visibleLines.map((line, i) => (
+              <li
+                key={i}
+                className="relative pl-4 text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed"
+              >
+                <span
+                  className="absolute left-0 top-[0.5em] w-1 h-1 rounded-full"
+                  style={{ background: "#6e73ff" }}
+                />
+                {line}
+              </li>
+            ))}
+          </ul>
 
-        {descriptionLines.length > 3 && (
-          <button
-            type="button"
-            onClick={() => setShowAll((prev) => !prev)}
-            className="self-start text-xs font-semibold text-[#6e73ff] hover:text-[#5a5fdd] transition-colors duration-200"
-          >
-            {showAll ? "Show less" : "Read more"}
-          </button>
-        )}
+          {descriptionLines.length > 3 && (
+            <button
+              type="button"
+              onClick={() => setShowAll((p) => !p)}
+              className="self-start text-[11px] font-semibold text-[#6e73ff] hover:text-[#5a5fdd] transition-colors mt-1"
+            >
+              {showAll ? "Show less ↑" : "Show more ↓"}
+            </button>
+          )}
+        </div>
+
+        {/* ── bottom section — always pinned to bottom ── */}
 
         {/* tech stack */}
         {project.technologies.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 pt-1">
+          <div className="flex flex-wrap gap-1.5 shrink-0">
             {project.technologies.map((tech) => (
               <TechPill key={tech.id} name={tech.name} />
             ))}
@@ -199,10 +211,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         )}
 
         {/* divider */}
-        <div className="h-px bg-black/5 dark:bg-white/5" />
+        <div className="h-px bg-black/5 dark:bg-white/5 shrink-0" />
 
-        {/* links */}
-        <div className="flex gap-2">
+        {/* links — always at bottom */}
+        <div className="flex gap-2 shrink-0">
           {hasLive && (
             <motion.a
               whileHover={{ scale: 1.03 }}
@@ -212,8 +224,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               rel="noopener noreferrer"
               className={`inline-flex items-center justify-center gap-1.5
                 text-xs font-medium py-2 rounded-lg
-                bg-[#6e73ff] text-white
-                hover:bg-[#5a5fdd]
+                bg-[#6e73ff] text-white hover:bg-[#5a5fdd]
                 shadow-[0_0_16px_rgba(110,115,255,0.3)]
                 hover:shadow-[0_0_24px_rgba(110,115,255,0.45)]
                 transition-all duration-200
@@ -249,6 +260,37 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   );
 }
 
+/* ── nav button ── */
+function NavBtn({
+  direction,
+  onClick,
+  disabled,
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+  disabled: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0
+        border transition-all duration-200
+        ${
+          disabled
+            ? "border-black/8 dark:border-white/8 text-zinc-300 dark:text-zinc-600 cursor-not-allowed"
+            : "border-black/10 dark:border-white/10 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-[#6e73ff] hover:text-white hover:border-[#6e73ff] shadow-sm"
+        }`}
+    >
+      {direction === "prev" ? (
+        <ChevronLeft size={16} />
+      ) : (
+        <ChevronRight size={16} />
+      )}
+    </button>
+  );
+}
+
 /* ── section ── */
 export default function Projects({ projects }: { projects: Project[] }) {
   const categories = PROJECT_CATEGORIES.filter((cat) =>
@@ -258,8 +300,17 @@ export default function Projects({ projects }: { projects: Project[] }) {
   const [activeCategory, setActiveCategory] = useState(
     categories[0]?.id ?? "company",
   );
+  const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
 
   const filtered = projects.filter((p) => p.category === activeCategory);
+
+  const handleCategoryChange = (id: string) => {
+    setActiveCategory(id);
+    setIsBeginning(true);
+    setIsEnd(false);
+  };
 
   return (
     <section
@@ -271,12 +322,12 @@ export default function Projects({ projects }: { projects: Project[] }) {
         Things I&apos;ve <AccentText>built</AccentText>
       </SectionTitle>
 
-      {/* tabs — only show categories that have projects */}
+      {/* tabs */}
       <div className="flex flex-wrap items-end gap-0 mt-10 border-b border-black/8 dark:border-white/8">
         {categories.map((cat) => (
           <button
             key={cat.id}
-            onClick={() => setActiveCategory(cat.id)}
+            onClick={() => handleCategoryChange(cat.id)}
             className={`relative px-5 py-3 text-sm font-medium transition-colors duration-200
               ${
                 activeCategory === cat.id
@@ -296,11 +347,30 @@ export default function Projects({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      <p className="mt-4 text-xs text-zinc-400 dark:text-zinc-500">
-        {CATEGORY_DESC[activeCategory]}
-      </p>
+      {/* desc + nav row */}
+      <div className="mt-4 flex items-center justify-between gap-4">
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">
+          {CATEGORY_DESC[activeCategory]}
+        </p>
 
-      {/* grid */}
+        {/* nav buttons — right aligned, only show when slides overflow */}
+        {filtered.length > 1 && (
+          <div className="flex items-center gap-2 shrink-0">
+            <NavBtn
+              direction="prev"
+              onClick={() => swiperRef?.slidePrev()}
+              disabled={isBeginning}
+            />
+            <NavBtn
+              direction="next"
+              onClick={() => swiperRef?.slideNext()}
+              disabled={isEnd}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* slider */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeCategory}
@@ -308,16 +378,44 @@ export default function Projects({ projects }: { projects: Project[] }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8"
+          className="mt-6"
         >
           {filtered.length === 0 ? (
-            <div className="col-span-full py-16 text-center text-sm text-zinc-400 dark:text-zinc-500 border border-dashed border-black/10 dark:border-white/10 rounded-2xl">
+            <div className="py-16 text-center text-sm text-zinc-400 dark:text-zinc-500 border border-dashed border-black/10 dark:border-white/10 rounded-2xl">
               No projects in this category yet — check back soon.
             </div>
           ) : (
-            filtered.map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
-            ))
+            // Wrap the Swiper in a div with overflow-hidden
+            <div className="overflow-hidden pb-4 md:pb-10">
+              <Swiper
+                modules={[Navigation, Pagination, A11y]}
+                onSwiper={setSwiperRef}
+                onSlideChange={(s) => {
+                  setIsBeginning(s.isBeginning);
+                  setIsEnd(s.isEnd);
+                }}
+                onReachBeginning={() => setIsBeginning(true)}
+                onReachEnd={() => setIsEnd(true)}
+                spaceBetween={20}
+                slidesPerView={1}
+                pagination={{ clickable: true }} // ← add this
+                breakpoints={{
+                  480: { slidesPerView: 1.2, spaceBetween: 16 },
+                  640: { slidesPerView: 2, spaceBetween: 20 },
+                  1024: { slidesPerView: 3, spaceBetween: 20 },
+                }}
+                className="!pb-10"
+              >
+                {filtered.map((project, i) => (
+                  <SwiperSlide
+                    key={project.id}
+                    style={{ height: "auto", alignSelf: "stretch" }}
+                  >
+                    <ProjectCard project={project} index={i} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           )}
         </motion.div>
       </AnimatePresence>
